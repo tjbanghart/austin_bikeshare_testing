@@ -1,6 +1,7 @@
 view: bikeshare_trips {
-  sql_table_name: `bigquery-public-data.austin_bikeshare.bikeshare_trips`
-    ;;
+  derived_table: {
+    sql: SELECT * FROM `bigquery-public-data.austin_bikeshare.bikeshare_trips` WHERE {% condition start_date %} start_time {% endcondition %} AND {% condition start_year %} start_time {% endcondition %};;
+  }
 
   dimension: bikeid {
     type: string
