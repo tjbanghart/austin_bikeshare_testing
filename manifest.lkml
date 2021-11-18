@@ -19,3 +19,4 @@ remote_dependency: test {
     value: "whatever"
   }
 }
+##

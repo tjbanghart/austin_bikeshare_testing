@@ -1,0 +1,47 @@
+{
+    "objects": [
+        {
+            "pipelineLogUri": "s3://looker-metared/build_lookml2", 
+            "name": "Default", 
+            "failureAndRerunMode": "CASCADE", 
+            "resourceRole": "DataPipelineDefaultResourceRole", 
+            "schedule": {
+                "ref": "DefaultSchedule"
+            }, 
+            "role": "DataPipelineDefaultRole", 
+            "scheduleType": "cron", 
+            "id": "Default"
+        }, 
+        {
+            "type": "Schedule", 
+            "startAt": "FIRST_ACTIVATION_DATE_TIME", 
+            "period": "3 Hours", 
+            "id": "DefaultSchedule", 
+            "name": "Every 3 hours"
+        }, 
+        {
+            "name": "run-build-lkml2-wrapper", 
+            "schedule": {
+                "ref": "DefaultSchedule"
+            }, 
+            "onFail": {
+                "ref": "pinger-build-lkml2-fail"
+            }, 
+            "workerGroup": "wg-metaetl", 
+            "attemptTimeout": "1 Hours",
+            "command": "~/aws-data-pipeline/bq-pinger-lkml2model-github/pinger/events/build_lkml2-wrapper.sh", 
+            "type": "ShellCommandActivity", 
+            "id": "ShellCommandActivityId_1"
+        }, 
+        {
+            "name": "pinger-build-lkml2-fail", 
+            "role": "DataPipelineDefaultRole", 
+            "message": "Pinger build_lkml2.rb failed. Check Pipeline logs on s3://looker-metared/build_lookml2, the script is running at ~/aws-data-pipeline/bq-pinger-lkml2model-github/pinger/events/build_lkml2-wrapper.sh on metaetl", 
+            "type": "SnsAlarm", 
+            "id": "pinger-build-lkml2-fail", 
+            "topicArn": "arn:aws:sns:us-east-1:632448438368:nifi4-notifications", 
+            "subject": "Pinger build_lkml2 failure"
+        }
+    ], 
+    "parameters": []
+}
