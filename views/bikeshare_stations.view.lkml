@@ -1,3 +1,18 @@
+view: dt_test {
+  derived_table: {
+    sql:
+      SELECT
+        address,
+        name,
+        station_id
+      FROM `bigquery-public-data.austin_bikeshare.bikeshare_stations`
+      {% if bikeshare_stations.council_district._is_filtered %}
+        WHERE
+        bikeshare_stations.council_district IN ({{ _filters['bikeshare_stations.council_district'] | split: "," | sql_quote | join: "," }})
+      {% endif %};;
+  }
+}
+
 view: bikeshare_stations {
   sql_table_name: `bigquery-public-data.austin_bikeshare.bikeshare_stations`
     ;;

@@ -5,7 +5,7 @@
 #   project: "name_of_other_project"
 # }
 
-aragonite: yes
+aragonite: no
 remote_dependency: test {
   url: "https://github.com/tjbanghart/block-google-chronicle"
   ref: "test"

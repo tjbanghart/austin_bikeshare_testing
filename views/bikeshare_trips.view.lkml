@@ -44,14 +44,27 @@ view: bikeshare_trips {
     description: "Start timestamp of trip"
     timeframes: [
       raw,
-      time,
       date,
-      week,
-      month,
-      quarter,
       year
     ]
     sql: ${TABLE}.start_time ;;
+  }
+
+  measure: start_begin {
+    hidden: yes
+    type: date_time
+    sql: MIN(${start_raw}) ;;
+  }
+
+  measure: start_end {
+    hidden: yes
+    type: date_time
+    sql: MAX(${start_raw}) ;;
+  }
+
+  measure: liquid_date_test{
+    type: string
+    sql: CONCAT(FORMAT_TIMESTAMP("%A, %B %e, %Y", TIMESTAMP ${start_begin})," to ", FORMAT_TIMESTAMP("%A, %B %e, %Y", TIMESTAMP ${start_end}));;
   }
 
   dimension: subscriber_type {
